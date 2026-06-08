@@ -13,10 +13,16 @@ export default function DashboardPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: async () => {
-      const res = await api.get("/dashboard/stats");
-      return res.data.data;
+      try {
+        const res = await api.get("/dashboard/stats");
+        return res.data.data;
+      } catch {
+        return null;
+      }
     },
     staleTime: 5 * 60 * 1000,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
   });
 
   const stats = [
