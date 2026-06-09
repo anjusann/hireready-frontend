@@ -28,12 +28,7 @@ export default function LoginPage() {
   const { setAuth } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-  const token = localStorage.getItem("auth_token");
-  if (token) {
-    router.replace("/dashboard");
-  }
-}, [router]);
+  
 
   const {
     register,

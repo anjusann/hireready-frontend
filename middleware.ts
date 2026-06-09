@@ -13,8 +13,6 @@ const protectedRoutes = [
   "/profile",
 ];
 
-const publicRoutes = ["/login", "/register"];
-
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("auth_token")?.value;
   const { pathname } = request.nextUrl;
@@ -23,18 +21,12 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route)
   );
 
-  const isPublic = publicRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
+  // Only redirect to home if trying to access protected route without token
   if (isProtected && !token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (isPublic && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-
+  // Do NOT redirect from login/register — let the page handle it
   return NextResponse.next();
 }
 
